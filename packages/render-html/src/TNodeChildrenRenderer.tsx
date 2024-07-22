@@ -59,17 +59,25 @@ export function useTNodeChildrenProps({
 /**
  * A component to render all children of a {@link TNode}.
  */
-function TNodeChildrenRenderer(
-  props: TNodeChildrenRendererProps
-): ReactElement {
-  if (props.tnode.type === 'text') {
+function TNodeChildrenRenderer({
+  tnode,
+  propsForChildren,
+  disableMarginCollapsing = false,
+  renderChild
+}: TNodeChildrenRendererProps): ReactElement {
+  if (tnode.type === 'text') {
     // see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20544
-    return props.tnode.data as unknown as ReactElement;
+    return tnode.data as unknown as ReactElement;
   }
   // A tnode type will never change. We can safely
   // ignore the non-conditional rule of hooks.
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  return renderChildren(useTNodeChildrenProps(props));
+  return renderChildren(useTNodeChildrenProps({
+    tnode,
+    propsForChildren,
+    disableMarginCollapsing,
+    renderChild
+  }));
 }
 
 export default TNodeChildrenRenderer;
